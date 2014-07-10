@@ -1,20 +1,20 @@
-chef-dsc Cookbook
+dsc-preview Cookbook
 ===============
 
-DSC is a prototype Chef Resource that exposes PowerShell Desired State
+This cookbook demonstrates prototype functionality to expose PowerShell Desired State
 Configuration (DSC) resources as Chef resources on the Microsoft Windows
 operating system. It requires PowerShell 4.0 or later
 which is available as part the Windows Management Foundation 4.0 components of Windows.
 
 This library is distributed as a Chef cookbook, use knife to upload it to your
-Chef server for usage and testing.
+Chef server for testing.
 
 ## Installation
 
-To use this cookbook with knife, clone it into a directory named `chef-dsc` in your
+To use this cookbook with knife, clone it into a directory in your
 cookbook path:
 
-    git clone git@github.com:opscode/chef-dsc-prototype chef-dsc
+    git clone git@github.com:opscode/dsc-preview
     
 ## Usage
 
