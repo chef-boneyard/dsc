@@ -1,4 +1,4 @@
-dsc-preview Cookbook
+dsc Cookbook
 ===============
 
 This cookbook demonstrates prototype functionality to expose PowerShell Desired State
@@ -14,7 +14,7 @@ Chef server for testing.
 To use this cookbook with knife, clone it into a directory in your
 cookbook path:
 
-    git clone git@github.com:opscode/dsc-preview
+    git clone git@github.com:opscode/dsc
     
 ## Usage
 
