@@ -28,6 +28,8 @@ class DscResource < Chef::Resource
   def initialize(name, run_context)
     super(name, run_context)
     @dsc_native_name = dsc_native_name.downcase.to_sym
+    @property_map = {}
+    class_properties.each { |property_data| @property_map.store(property_data['Name'].downcase, property_data) }
     @resource_state = DscResourceState.new(@dsc_native_name)
     @resource_name = "dsc_#{@dsc_native_name}".to_sym
     @allowed_actions.push(:set)
@@ -36,11 +38,18 @@ class DscResource < Chef::Resource
     provider(ConfigScript)
   end
 
+  public
+
   def property(property_name, value=nil, validate=false)
+    if not property_name.is_a?(Symbol)
+      raise TypeError, "A property name of type Symbol must be specified, '#{property_name.to_s}' of type #{property_name.class.to_s} was given"
+    end
+
+    native_property_name = @property_map.fetch(property_name.to_s)['Name']
     if value.nil?
-      @resource_state.get_property(property_name)
+      @resource_state.get_property(native_property_name)
     else
-      @resource_state.set_property(property_name, value)
+      @resource_state.set_property(native_property_name, value)
     end
   end
 end

@@ -85,12 +85,12 @@ describe DscResourceBuilder do
   let(:dsc_resource_name) { 'WindowsFeature' }
   it "should be able to create a new instance of WindowsFeature" do
     windows_feature = new_resource
-    expect(windows_feature.dsc_name).to eq(nil)
+    expect(windows_feature.property(:name)).to eq(nil)
     expect(windows_feature.name).to eq('testclass')
     expect(windows_feature.class.to_s).to eq('DscResource::WindowsFeature')
     expect(windows_feature.resource_name).to eq("dsc_windowsfeature".downcase.to_sym)
 
-    expect { windows_feature.dsc_not_a_property }.to raise_error NoMethodError
+    expect { windows_feature.property(:dsc_not_a_property) }.to raise_error KeyError
   end
 
   it "should be able to create new classes and instances for all resources" do
@@ -106,6 +106,7 @@ describe DscResourceBuilder do
     end
   end
 
+=begin
   it "should remap the name of a DSC resource property that is a Ruby keyword with a dsc_prefix when it defines the method for it" do
     windows_feature = new_resource
     expect(windows_feature.dsc_ensure).to eq(nil)
@@ -114,6 +115,7 @@ describe DscResourceBuilder do
 
     expect { windows_feature.ensure }.to raise_error NoMethodError
   end
+=end
 
   it "should have :set and :test as allowed actions" do
     expect(new_resource.allowed_actions.include?(:set)).to eq(true)
@@ -130,12 +132,12 @@ describe DscResourceBuilder do
 
   it "should be able to set and return a property of WindowsFeature" do
     windows_feature = new_resource
-    expect(windows_feature.dsc_name).to eql(nil)
-    windows_feature.dsc_name('myname')
-    expect(windows_feature.dsc_name).to eq('myname')
-    expect(windows_feature.includeallsubfeature).to eq(nil)
-    windows_feature.includeallsubfeature('$true')
-    expect(windows_feature.includeallsubfeature).to eq('$true')
+    expect(windows_feature.property(:name)).to eql(nil)
+    windows_feature.property(:name, 'myname')
+    expect(windows_feature.property(:name)).to eq('myname')
+    expect(windows_feature.property(:includeallsubfeature)).to eq(nil)
+    windows_feature.property(:includeallsubfeature, '$true')
+    expect(windows_feature.property(:includeallsubfeature)).to eq('$true')
   end
 
   it "should be able to create only the classes for specific dsc resources" do

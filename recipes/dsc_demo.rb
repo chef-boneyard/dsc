@@ -18,7 +18,7 @@
 
 include_dsc 'Group'
 
-dsc_group 'demogroup' do
-  groupname 'demo1'
-  memberstoinclude 'administrator'
+dsc_group 'demogroupx' do
+  property :groupname 'demo1'
+  property :memberstoinclude 'administrator'
 end

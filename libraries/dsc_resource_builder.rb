@@ -65,7 +65,7 @@ class DscResourceBuilder
       end
     end
 
-    create_methods(resource_class, properties)
+#    create_methods(resource_class, properties)
 
     resource_class
   end

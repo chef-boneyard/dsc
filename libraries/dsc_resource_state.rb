@@ -28,12 +28,17 @@ class DscResourceState
   end
 
   def set_property(name, value)
-    @properties[name] = value
+    @properties[normalize_name(name)] = value
   end
 
   def get_property(name)
-    @properties[name]
+    @properties[normalize_name(name)]
   end  
 
+  protected
+
+  def normalize_name(name)
+    name.is_a?(Symbol) ? name.to_s.downcase : name
+  end
 end
 
