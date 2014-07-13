@@ -45,7 +45,7 @@ class DscResource < Chef::Resource
       raise TypeError, "A property name of type Symbol must be specified, '#{property_name.to_s}' of type #{property_name.class.to_s} was given"
     end
 
-    native_property_name = @property_map.fetch(property_name.to_s)['Name']
+    native_property_name = @property_map.fetch(property_name.to_s.downcase)['Name']
     if value.nil?
       @resource_state.get_property(native_property_name)
     else
