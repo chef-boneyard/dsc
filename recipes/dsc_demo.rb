@@ -19,6 +19,7 @@
 include_dsc 'Group'
 
 dsc_group 'demogroupx' do
+  resource_name :group
   property :GroupName, 'demo1'
   property :MembersToInclude, 'administrator'
 end

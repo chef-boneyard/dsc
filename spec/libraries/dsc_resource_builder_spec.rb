@@ -126,8 +126,8 @@ describe DscResourceBuilder do
     expect(new_resource.action).to eq(:set)
   end
 
-  it "should have a provider of Chef::Provider::ConfigScript" do
-    expect(new_resource.provider).to eq(ConfigScript)
+  it "should have a provider of Chef::Provider::DscProvider" do
+    expect(new_resource.provider).to eq(DscProvider)
   end
 
   it "should be able to set and return a property of WindowsFeature" do

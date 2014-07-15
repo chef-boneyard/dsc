@@ -38,7 +38,8 @@ class DscResourceState
   protected
 
   def normalize_name(name)
-    name.is_a?(Symbol) ? name.to_s.downcase : name
+    # name.is_a?(Symbol) ? name.to_s.downcase : name
+    name
   end
 end
 
