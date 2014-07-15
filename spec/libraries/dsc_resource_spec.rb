@@ -36,7 +36,6 @@ describe DscResource do
     DscResource.new('testclass', @run_context)
   end
 
-  let(:dsc_resource_name) { 'WindowsFeature' }
   it "should be able to create a new instance of WindowsFeature" do
     new_resource.resource_name :windowsfeature
     windows_feature = new_resource
@@ -50,6 +49,18 @@ describe DscResource do
 
     expect { windows_feature.run_action(:set) }.to raise_error KeyError
   end
+
+  it "should be able to execute the set action of an instance of Environment" do
+    new_resource.resource_name :environment
+    variable_name = "dsc_test_#{Time.now.nsec}"
+    variable_value = Time.now.to_s
+    new_resource.property :name, variable_name
+    new_resource.property :value, variable_value
+
+    expect(new_resource.resource_name).to eq("environment".downcase.to_sym)
+    expect { new_resource.run_action(:set) }.not_to raise_error
+  end
+
 =begin
   it "should be able to create new classes and instances for all resources" do
     classes = DscResourceBuilder.create_resource_classes
@@ -62,16 +73,6 @@ describe DscResource do
       expect(class_name.length).to be >= 1
       expect(new_object.resource_name).to eq("dsc_#{class_name}".downcase.to_sym)
     end
-  end
-=end
-=begin
-  it "should remap the name of a DSC resource property that is a Ruby keyword with a dsc_prefix when it defines the method for it" do
-    windows_feature = new_resource
-    expect(windows_feature.dsc_ensure).to eq(nil)
-    windows_feature.dsc_ensure('Present')
-    expect(windows_feature.dsc_ensure).to eq('Present')
-
-    expect { windows_feature.ensure }.to raise_error NoMethodError
   end
 =end
 

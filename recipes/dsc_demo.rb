@@ -16,9 +16,19 @@
 # limitations under the License.
 #
 
-include_dsc 'Group'
+dsc_resource 'demogroupremove' do
+  resource_name :group
+  property :groupname, 'demo1'
+  property :ensure, 'absent'
+end
 
-dsc_group 'demogroupx' do
+dsc_resource 'demogroupadd' do
+  resource_name :group
+  property :GroupName, 'demo1'
+  property :MembersToInclude, 'administrator'
+end
+
+dsc_resource 'demogroupadd2' do
   resource_name :group
   property :GroupName, 'demo1'
   property :MembersToInclude, 'administrator'

@@ -17,27 +17,8 @@
 #
 
 require_relative 'dsc_resource_store'
-require_relative 'dsc_resource'
-require_relative 'dsc_resource_state.rb'
-# require_relative 'config_script'
-
-require 'pry'
 
 class DscProvider < Chef::Provider
-=begin
-  def initialize(dsc_resource, run_context)
-    super(dsc_resource, run_context)
-    @dsc_resource = dsc_resource
-    @resource_converged = false
-    @config_script = nil
-    @property_map = {}
-  end
-
-  def action_set
-    @config_script.action_set
-  end
-=end
-
   def initialize(dsc_resource, run_context)
     super(dsc_resource, run_context)
     @dsc_resource = dsc_resource
@@ -48,49 +29,12 @@ class DscProvider < Chef::Provider
 
   def action_set
     if ! @resource_converged
-      converge_by("DSC Resource type '#{@dsc_resource.dsc_native_name}'") do
+      converge_by("DSC Resource type '#{@dsc_resource.resource_name}'") do
         set_configuration
-        Chef::Log.info("DSC Resource type '#{@dsc_resource.dsc_native_name}' Configuration completed successfully")
+        Chef::Log.info("DSC Resource type '#{@dsc_resource.resource_name}' Configuration completed successfully")
       end
     end
   end
-
-  def get_normalized_resource!
-    empty_events = Chef::EventDispatch::Dispatcher.new
-    anonymous_run_context = Chef::RunContext.new(node, {}, empty_events)
-    normalized_resource = DscResource.new(@dsc_resource.dsc_native_name, anonymous_run_context)
-    normalized_resource.provider(ConfigScript)
-
-    @dsc_resource.resource_state.properties.keys.each do | property_name |
-      property_value = @dsc_resource.resource_state.properties[property_name]
-      add_normalized_property!(normalized_resource, property_name, property_value)
-    end
-
-    normalized_resource
-  end
-
-  def get_normalized_properties!
-    normalized_properties = {}
-    @dsc_resource.resource_state.properties.keys.each do | property_name |
-      property_value = @dsc_resource.resource_state.properties[property_name]
-      add_normalized_property!(normalized_properties, property_name, property_value)
-    end
-
-    normalized_properties
-  end
-
-=begin
-  def load_current_resource
-    native_resource = get_native_dsc_resource
-    native_resource['Properties'].each { |property_data| @property_map.store(property_data['Name'].downcase, property_data) }
-
-    normalized_dsc_resource = get_normalized_resource!
-    
-#    @config_script = ConfigScript.new(@dsc_resource, @run_context)
-    @config_script = ConfigScript.new(normalized_dsc_resource, normalized_dsc_resource.run_context)
-    @config_script.load_current_resource
-  end
-=end
 
   def load_current_resource
     native_resource = get_native_dsc_resource
@@ -106,8 +50,18 @@ class DscProvider < Chef::Provider
 
   protected
 
+  def get_normalized_properties!
+    normalized_properties = {}
+    @dsc_resource.properties.keys.each do | property_name |
+      property_value = @dsc_resource.properties[property_name]
+      add_normalized_property!(normalized_properties, property_name, property_value)
+    end
+
+    normalized_properties
+  end
+
   def get_native_dsc_resource
-    DscResourceStore.get_resource(@dsc_resource.dsc_native_name)
+    DscResourceStore.get_resource(@dsc_resource.resource_name)
   end
 
   def validate_property!(property_key)
@@ -120,14 +74,6 @@ class DscProvider < Chef::Provider
     normalized_properties.store(key.to_sym, property_value)
   end
 
-=begin
-  def add_normalized_property!(normalized_resource, property_name, property_value)
-    key = property_name.to_s.downcase
-    puts "Prop: #{property_name} key = #{key}"
-    validate_property!(key)
-    normalized_resource.property(key.to_sym, property_value)
-  end
-=end
   def generate_configuration(config_directory)
     code = get_configuration_code
     Chef::Log.debug("DSC code:\n '#{code}'")
@@ -146,7 +92,7 @@ EOH
 
   def resource_code
     <<-EOH
-    #{@dsc_resource.dsc_native_name} 'chef_dsc'
+    #{@dsc_resource.resource_name} 'chef_dsc'
     {
 #{property_code}
     }
@@ -154,7 +100,6 @@ EOH
   end
 
   def property_code
-#    properties = @dsc_resource.resource_state.properties.map { |name, value| 
     properties = @normalized_properties.map { |name, value| 
       value_code = value
       value_code = "'#{value_code}'" if ! value_code.kind_of? Numeric
