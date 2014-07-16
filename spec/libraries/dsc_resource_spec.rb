@@ -61,6 +61,11 @@ describe DscResource do
     expect { new_resource.run_action(:set) }.not_to raise_error
   end
 
+  it "should raise a runtime exception if a non-existent DSC resource is specified for the resource_name attribute" do
+    new_resource.resource_name :idontexist
+    expect { new_resource.run_action(:set) }.to raise_error
+  end
+
 =begin
   it "should be able to create new classes and instances for all resources" do
     classes = DscResourceBuilder.create_resource_classes
