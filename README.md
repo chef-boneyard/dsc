@@ -3,7 +3,7 @@ dsc Cookbook
 
 This cookbook demonstrates prototype functionality to expose PowerShell Desired State
 Configuration (DSC) resources as Chef resources on the Microsoft Windows
-operating system. It requires PowerShell 4.0 or later
+operating system. **It requires PowerShell 4.0 or later**
 which is available as part the Windows Management Foundation 4.0 components of Windows.
 
 This library is distributed as a Chef cookbook, use knife to upload it to your
@@ -65,12 +65,11 @@ just the DSC `Archive` resource exposed in Chef's Domain Specific Language
 (DSL) like every other resource in Chef:
 
 ```ruby
-    include_dsc 'archive'
-
-    dsc_archive 'get-dsc-resource-kit' do
-      dsc_ensure 'Present'
-      path "#{ENV['USERPROFILE']}/Downloads/DSC Resource Kit 03282014.zip"
-      destination "#{ENV['PROGRAMW6432']}/WindowsPowerShell/Modules"
+    dsc_resource 'get-dsc-resource-kit' do
+      resource_name :archive
+      property :ensure, 'Present'
+      property :path, "#{ENV['USERPROFILE']}/Downloads/DSC Resource Kit 03282014.zip"
+      property :destination, "#{ENV['PROGRAMW6432']}/WindowsPowerShell/Modules"
     end
 ```
 
@@ -100,54 +99,27 @@ DSC resources and their semantics / usage, you can use the following simple
 rules to take the knowledge of those DSC resources and express them in Chef
 recipes as Chef resources:
 
-Given a DSC resource *D* with properties *P* and desired property values *V*, let *R*
-be a Chef resource with the following characteristics:
+1. To use a DSC resource in Chef, use the `dsc_resource` resource in your recipe
+2. Set the `resource_name` attribute to the name of the resource as a symbol, i.e. `WindowsFeature` in DSC becomes
+`:windowsfeature`.
+3. For each property in the DSC resource for which you want to declare a desired value, use the syntax
 
-1. R is expressed in a Chef recipe using the normal Chef / Ruby syntax
-2. *R* must be preceded in Ruby interpreter execution by the execution of the
-`include_dsc` directive that takes the *PowerShell resource name* of *D* as a
-`String` argument.
-    > Example: the Chef code `include_dsc 'Group'` could be placed at the top of the recipe that contains *R*.
-3. The Chef *short resource name* of *R* is equal to the *PowerShell resource
-name* of *D* converted to all lower-case and preceded by the prefix `dsc_`.
+```ruby
+   property :property_name, value
+```
 
-    > For example, if the resource name of D is `WindowsFeature`, the short resource
-    > name of *R* is `dsc_windowsfeature`.
+That's it -- note that case *does not* matter for any of the symbols given above, which is also true of names expressed in the
+DSC DSL.
 
-4. For each property *p* in *P*, let *b* be the name of *p* in all lowercase.
-Then there exists an attribute *a* such that one
-of the following is true:
-  1. *a* is named *b* preceded by the prefix `dsc_` iff *b* is identical to a
-  keyword or other reserved element of the Ruby language
-  2. *a* is named *b* preceded by the prefix `dsc_` iff *b* is identical to an
-  existing attribute or method of the `Chef::Resource` base class
-  3. *a* is named *b* iff neither of the above conditions applies
-
-    > For example, a DSC property named `Path` would become `path` attribute in
-    > Chef (rule #3 above). The DSC property named `Ensure` would become the attribute `dsc_ensure` because there is a
-    > Ruby keyword called `ensure` (rule #1 above).
-
-5. If the value *v* in *V* was assigned to a property *p* in *P*, there exists an
-assignment of the value *c* to the attribute *a* in *R* that corresponds to *p* such that
-the Ruby type of *c* is typed according to the following conditions:
-  1. If the CLR type of *p* is a `float` or `int32` or `uint32`, *c*'s type is
-  `Number`
-  2. If the CLR type of *p* is a `boolean`, *c*'s type is either `FalseClass`
-  or `TrueClass`
-  3. Otherwise the type of *c* is `String`
-
-    > Thus given an assignment fragment in a DSC configuraition such as `DiskSize = 5`, the corresponding attribute assigment in Chef would be `disksize 5`.
-
-Putting all of these rules together, we can annotate the Chef translation of
+For example, we can annotate the Chef translation of
 the DSC resource *InstallDSCReskit* given earlier as follows:
 
 ```ruby
-    include_dsc 'Archive' # Directive so we can use DSC's Archive resource
-
-    dsc_archive 'get-dsc-resource-kit' do # DSC 'Archive' renamed to lowercase prefixed 'dsc_archive'
-      dsc_ensure 'Present' # DSC's 'Ensure' renamed to lowercase, prefix 'dsc_ensure' to avoid 'ensure' Ruby keyword
-      path "#{ENV['USERPROFILE']}/Downloads/DSC Resource Kit 03282014.zip" # 'Path' becomes 'path' set to a 'String' type
-      destination "#{ENV['PROGRAMW6432']}/WindowsPowerShell/Modules" # 'Destination' becomes 'destination'
+    dsc_resource 'get-dsc-resource-kit' do 
+      resource_name :Archive
+      property :ensure, 'Present'
+      property :path, "#{ENV['USERPROFILE']}/Downloads/DSC Resource Kit 03282014.zip"
+      property :destination, "#{ENV['PROGRAMW6432']}/WindowsPowerShell/Modules"
     end
 ```
 
