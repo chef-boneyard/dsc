@@ -28,3 +28,11 @@ dsc_archive 'get-dsc-resource-kit' do
   path "#{Chef::Config[:file_cache_path]}\\DSC Resource Kit 03282014.zip"
   destination "#{ENV['PROGRAMW6432']}\\WindowsPowerShell\\Modules"
 end
+
+=begin
+x_dsc_archive 'get-dsc-resource-kit' do
+  property :ensure, 'Present'
+  property :path, "#{Chef::Config[:file_cache_path]}\\DSC Resource Kit 03282014.zip"
+  property :destination, "#{ENV['PROGRAMW6432']}\\WindowsPowerShell\\Modules"
+end
+=end

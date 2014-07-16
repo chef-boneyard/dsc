@@ -16,31 +16,41 @@
 # limitations under the License.
 #
 
-require_relative 'dsc_resource_state.rb'
-require_relative 'config_script'
+require_relative 'dsc_provider'
 
 class DscResource < Chef::Resource
 
-  attr_reader :resource_state
+  attr_reader :properties
 
-  protected
-  
   def initialize(name, run_context)
     super(name, run_context)
-    @dsc_native_name = dsc_native_name.downcase.to_sym
-    @resource_state = DscResourceState.new(@dsc_native_name)
-    @resource_name = "dsc_#{@dsc_native_name}".to_sym
+    @properties = {}
+    @resource_name = nil
     @allowed_actions.push(:set)
     @allowed_actions.push(:test)
     @action = :set
-    provider(ConfigScript)
+    provider(DscProvider)
+  end
+
+  def resource_name(value=nil)
+    if value
+      @resource_name = value
+    else
+      @resource_name
+    end
   end
 
   def property(property_name, value=nil, validate=false)
+    if not property_name.is_a?(Symbol)
+      raise TypeError, "A property name of type Symbol must be specified, '#{property_name.to_s}' of type #{property_name.class.to_s} was given"
+    end
+
+    normalized_property_name = property_name.to_s.to_sym
+
     if value.nil?
-      @resource_state.get_property(property_name)
+      @properties[normalized_property_name]
     else
-      @resource_state.set_property(property_name, value)
+      @properties[normalized_property_name] = value
     end
   end
 end
