@@ -25,6 +25,7 @@ class DscProvider < Chef::Provider
     @resource_converged = false
     @property_map = {}
     @normalized_properties
+    @ps_module = nil
   end
 
   def action_set
@@ -38,6 +39,7 @@ class DscProvider < Chef::Provider
 
   def load_current_resource
     native_resource = get_native_dsc_resource
+    @ps_module = native_resource['Module']
     native_resource['Properties'].each { |property_data| @property_map.store(property_data['Name'].downcase, property_data) }
 
     @normalized_properties = get_normalized_properties!
@@ -84,10 +86,16 @@ class DscProvider < Chef::Provider
     <<-EOH
 configuration 'chef_dsc'
 {
+#{module_code}
 #{resource_code}
 }
 chef_dsc
 EOH
+  end
+
+  def module_code
+    module_name = @ps_module ? @ps_module['Name'] : nil
+    module_name.nil? ? nil : "import-dscresource -module #{module_name}"
   end
 
   def resource_code
