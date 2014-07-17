@@ -128,13 +128,10 @@ the DSC resource *InstallDSCReskit* given earlier as follows:
 ### Tasks
 
 * Additional prototyping
-  * Additional type safety
   * Better error handling / messages
 * RFC in the public [Chef RFC repository](https://github.com/opscode/chef-rfc)
 * Update `ohai` to detect PowerShell version 
 * Direct integration into Chef rather than cookbook
-* Don't just downcase names, probably snake case them if PowerShell is
-  reliable about snake casing
 * Caching of DSC resources to avoid DSC queries (if needed)
 * Update `powershell` cookbook to obtain most recent PowerShell 5.0 CTP and
   release versions
