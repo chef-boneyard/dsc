@@ -20,10 +20,12 @@ require_relative 'dsc_provider'
 
 class DscResource < Chef::Resource
 
+  provides :dsc_resource, :on_platforms => ["windows"]
+
   attr_reader :properties
 
   def initialize(name, run_context)
-    super(name, run_context)
+    super
     @properties = {}
     @resource_name = nil
     @allowed_actions.push(:set)

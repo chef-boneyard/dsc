@@ -17,6 +17,7 @@
 #
 
 require_relative 'dsc_resource_store'
+require_relative 'dsc_resource'
 
 class DscProvider < Chef::Provider
   def initialize(dsc_resource, run_context)
@@ -34,6 +35,13 @@ class DscProvider < Chef::Provider
         set_configuration
         Chef::Log.info("DSC Resource type '#{@dsc_resource.resource_name}' Configuration completed successfully")
       end
+    end
+  end
+
+  def action_test
+    converge_by("DSC Resource type '#{@dsc_resource.resource_name}'") do
+      Chef::Log.info("DSC Resource type '#{@dsc_resource.resource_name}' Configuration completed successfully")
+      ! @resource_converged
     end
   end
 
@@ -67,13 +75,26 @@ class DscProvider < Chef::Provider
   end
 
   def validate_property!(property_key)
-    @property_map.fetch(property_key)
+    property_data = @property_map.fetch(property_key)
   end
 
   def add_normalized_property!(normalized_properties, property_name, property_value)
     key = property_name.to_s.downcase
     validate_property!(key)
     normalized_properties.store(key.to_sym, property_value)
+  end
+
+  def type_coercions
+    @type_coercions = {
+      Fixnum => { :type => lambda { |x| x.to_s }, :single_quoted => false },
+      Float => { :type => lambda { |x| x.to_s }, :single_quoted => false },
+      @dsc_resource.class => { :type => Proc.new { |x| resource_code(x) }, :single_quoted => false },
+      FalseClass => { :type => lambda { |x| '$false' }, :single_quoted => false },
+      TrueClass => { :type => lambda { |x| '$true' }, :single_quoted => false }
+    }
+  end
+
+  def validate_type
   end
 
   def generate_configuration(config_directory)
@@ -99,8 +120,13 @@ EOH
   end
 
   def resource_code
+    self.class.resource_code(@dsc_resource.resource_name, property_code)
+  end
+
+  def self.resource_code(resource_class_name, property_code, named_resource = true)
+    dsc_resource_instance_name = named_resource ? 'chef_dsc' : ''
     <<-EOH
-    #{@dsc_resource.resource_name} 'chef_dsc'
+    #{resource_class_name} #{dsc_resource_instance_name}
     {
 #{property_code}
     }
@@ -109,19 +135,34 @@ EOH
 
   def property_code
     properties = @normalized_properties.map { |name, value| 
-      value_code = value
-      value_code = "'#{value_code}'" if ! value_code.kind_of? Numeric
+      value_code = translate_type(value)
       "        #{name} = #{value_code}"
     }
     
     properties.join("\n")
   end
 
+  def translate_type(value)
+    translation = type_coercions[value.class]
+    should_quote = true
+    translated_value = nil
+
+    if translation
+      should_quote = translation[:single_quoted]
+      translated_value = translation[:type].call(value)
+    else
+      translated_value = value.to_s
+    end
+
+    translated_value = "'#{translated_value}'" if should_quote
+    translated_value
+  end
+
   def run_powershell(config_directory, code) 
     cmdlet = PowershellCmdlet.new("#{code}")
     cmdlet.run
   end
-  
+
   def set_configuration
     run_configuration :set
   end

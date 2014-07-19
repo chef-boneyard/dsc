@@ -100,9 +100,19 @@ describe DscResource do
     windows_feature.property(:name, 'myname')
     expect(windows_feature.property(:name)).to eq('myname')
     expect(windows_feature.property(:includeallsubfeature)).to eq(nil)
-    windows_feature.property(:includeallsubfeature, '$true')
-    expect(windows_feature.property(:includeallsubfeature)).to eq('$true')
+    windows_feature.property(:includeallsubfeature, true)
+    expect(windows_feature.property(:includeallsubfeature)).to eq(true)
   end
+
+  it "should be able to coerce a boolean property of Environment during converge" do
+    new_resource.resource_name(:environment)
+    new_resource.property(:value, 'mypath')
+    new_resource.property(:name, 'c:\fun.txt')
+    new_resource.property(:path, true)
+    expect(new_resource.property(:path)).to eq(true)
+    expect {new_resource.run_action(:test) }.not_to raise_error
+  end
+
 
 end
 
