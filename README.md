@@ -4,7 +4,7 @@ dsc Cookbook
 This cookbook demonstrates **prototype** functionality to expose PowerShell Desired State
 Configuration (DSC) resources as Chef resources on the Microsoft Windows
 operating system. **This cookbook requires PowerShell 4.0 or later**
-which is available as part the Windows Management Foundation 4.0 components of Windows.
+which is available as part the [Windows Management Foundation 4.0](http://www.microsoft.com/en-us/download/details.aspx?id=40855) components of Windows.
 
 Use knife to upload the cookbook to your Chef server for testing.
 
