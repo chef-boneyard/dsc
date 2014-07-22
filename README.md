@@ -26,7 +26,7 @@ issues will likely be addressed in the Chef project rather than this one.
 To use this cookbook with knife, clone it into a directory in your
 cookbook path:
 
-    git clone git@github.com:opscode/dsc
+    git clone https://github.com/opscode-cookbooks/dsc.git
     
 ## Usage
 
@@ -148,7 +148,6 @@ Many of the tasks below will be completed outside of this cookbook as the functi
 * Update `ohai` to detect PowerShell version 
 * Direct integration into Chef rather than cookbook
 * Caching of DSC resources to avoid DSC queries (if needed)
-* Update `powershell` cookbook to obtain most recent PowerShell 5.0 CTP and
   release versions
 * Alternative to shelling-out to powershell.exe for each interaction with LCM
 * Disallow "problematic" properties such as `dependson`.
