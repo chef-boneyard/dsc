@@ -167,7 +167,7 @@ None currently identified, but more will probably arise once an official RFC is 
       property given its value. Also, if the attribute translation were to be retained, it appears that always prefixing with a
       dsc "namespace" would have been preferable.
 * How do we document resources? We can point to MSDN documentation, but the
-  name mapping rules must understood by the user (e.g. everything must be
+  name mapping rules must be understood by the user (e.g. everything must be
   lower case, use dsc_ prefix for Ruby keywords, etc).
   * **Resolution:** The decision to use a single Chef resource for all DSC resources that itself uses a single attribute
       (expressed multiple times) for each DSC property simplifies this significantly. See the discussion earlier where the use
