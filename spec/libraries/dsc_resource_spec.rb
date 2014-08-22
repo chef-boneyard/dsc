@@ -32,23 +32,45 @@ describe DscResource do
     @run_context = Chef::RunContext.new(new_node, {}, events)
   end
 
+  before(:each) do
+    # Keep test output free of warnings from deprecated attributes
+    allow(Chef::Log).to receive(:warn)
+  end
+
   let(:new_resource) do
     DscResource.new('testclass', @run_context)
   end
 
-  it "should be able to create a new instance of WindowsFeature" do
+  it "should be able to create a new instance of WindowsFeature using the deprecated resource_name attribute" do
     new_resource.resource_name :windowsfeature
     windows_feature = new_resource
     expect(windows_feature.property(:name)).to eq(nil)
     expect(windows_feature.name).to eq('testclass')
     expect(windows_feature.class.to_s).to eq('DscResource')
-    expect(windows_feature.resource_name).to eq("windowsfeature".downcase.to_sym)
+    expect(windows_feature.resource).to eq("windowsfeature".downcase.to_sym)
+    expect(windows_feature.resource_name).to eq(:dsc_resource)
 
     expect { windows_feature.property(:dsc_not_a_property) }.not_to raise_error
     expect { windows_feature.property(:dsc_not_a_property, 'notthere') }.not_to raise_error
 
     expect { windows_feature.run_action(:set) }.to raise_error KeyError
   end
+
+  it "should be able to create a new instance of WindowsFeature using the resource attribute" do
+    new_resource.resource :windowsfeature
+    windows_feature = new_resource
+    expect(windows_feature.property(:name)).to eq(nil)
+    expect(windows_feature.name).to eq('testclass')
+    expect(windows_feature.class.to_s).to eq('DscResource')
+    expect(windows_feature.resource).to eq("windowsfeature".downcase.to_sym)
+    expect(windows_feature.resource_name).to eq(:dsc_resource)
+
+    expect { windows_feature.property(:dsc_not_a_property) }.not_to raise_error
+    expect { windows_feature.property(:dsc_not_a_property, 'notthere') }.not_to raise_error
+
+    expect { windows_feature.run_action(:set) }.to raise_error KeyError
+  end
+
 
   it "should be able to execute the set action of an instance of Environment" do
     new_resource.resource_name :environment
@@ -57,7 +79,8 @@ describe DscResource do
     new_resource.property :name, variable_name
     new_resource.property :value, variable_value
 
-    expect(new_resource.resource_name).to eq("environment".downcase.to_sym)
+    expect(new_resource.resource).to eq("environment".downcase.to_sym)
+    expect(new_resource.resource_name).to eq(:dsc_resource)
     expect { new_resource.run_action(:set) }.not_to raise_error
   end
 

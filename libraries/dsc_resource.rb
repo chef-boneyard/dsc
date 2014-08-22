@@ -27,18 +27,33 @@ class DscResource < Chef::Resource
   def initialize(name, run_context)
     super
     @properties = {}
-    @resource_name = nil
+    @resource_name = :dsc_resource
+    @resource = nil
     @allowed_actions.push(:set)
     @allowed_actions.push(:test)
     @action = :set
     provider(DscProvider)
   end
 
+  # The replacement for this the #resource method -- this one is deprecated.
+  # This method collides with the base class, and should be removed.
+  # Unfortunately that would break applications, so we'll give it a
+  # somewhat strange behavior that should allow applications to work without
+  # interfering with the common usage for the base class.
   def resource_name(value=nil)
     if value
-      @resource_name = value
+      Chef::Log.warn('The #resource_name method for dsc_resource is deprecated and will be removed. Please use #resource instead.')
+      @resource = value
     else
       @resource_name
+    end
+  end
+
+  def resource(value=nil)
+    if value
+      @resource = value
+    else
+      @resource
     end
   end
 

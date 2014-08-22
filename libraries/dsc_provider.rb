@@ -31,16 +31,16 @@ class DscProvider < Chef::Provider
 
   def action_set
     if ! @resource_converged
-      converge_by("DSC Resource type '#{@dsc_resource.resource_name}'") do
+      converge_by("DSC Resource type '#{dsc_resource_name}}'") do
         set_configuration
-        Chef::Log.info("DSC Resource type '#{@dsc_resource.resource_name}' Configuration completed successfully")
+        Chef::Log.info("DSC Resource type '#{dsc_resource_name}' Configuration completed successfully")
       end
     end
   end
 
   def action_test
-    converge_by("DSC Resource type '#{@dsc_resource.resource_name}'") do
-      Chef::Log.info("DSC Resource type '#{@dsc_resource.resource_name}' Configuration completed successfully")
+    converge_by("DSC Resource type '#{dsc_resource_name}'") do
+      Chef::Log.info("DSC Resource type '#{dsc_resource_name}' Configuration completed successfully")
       ! @resource_converged
     end
   end
@@ -60,6 +60,10 @@ class DscProvider < Chef::Provider
 
   protected
 
+  def dsc_resource_name
+    @dsc_resource.resource || @dsc.resource_name
+  end
+
   def get_normalized_properties!
     normalized_properties = {}
     @dsc_resource.properties.keys.each do | property_name |
@@ -71,7 +75,7 @@ class DscProvider < Chef::Provider
   end
 
   def get_native_dsc_resource
-    DscResourceStore.get_resource(@dsc_resource.resource_name)
+    DscResourceStore.get_resource(dsc_resource_name)
   end
 
   def validate_property!(property_key)
@@ -120,7 +124,7 @@ EOH
   end
 
   def resource_code
-    self.class.resource_code(@dsc_resource.resource_name, property_code)
+    self.class.resource_code(dsc_resource_name, property_code)
   end
 
   def self.resource_code(resource_class_name, property_code, named_resource = true)
