@@ -16,10 +16,9 @@
 # limitations under the License.
 #
 
-include_dsc 'WindowsFeature'
-
-dsc_windowsfeature 'iis' do
-  dsc_name 'Web-Server'
-  dsc_ensure 'Present'
+dsc_resource 'Install IIS' do
+  resource_name :WindowsFeature
+  property :ensure, 'Present'
+  property :name, 'Web-Server'
 end
 
