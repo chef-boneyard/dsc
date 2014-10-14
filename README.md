@@ -78,7 +78,7 @@ exposes the DSC `Archive` resource in Chef's Domain Specific Language
 
 ```ruby
     dsc_resource 'DSCReskitFromModules' do
-      resource_name :archive
+      resource :archive
       property :ensure, 'Present'
       property :path, "#{ENV['USERPROFILE']}/Downloads/DSC Resource Kit 03282014.zip"
       property :destination, "#{ENV['PROGRAMW6432']}/WindowsPowerShell/Modules"
@@ -111,7 +111,7 @@ rules to take the knowledge of those DSC resources and express them in Chef
 recipes as Chef resources:
 
 1. To use a DSC resource in Chef, use the `dsc_resource` resource in your recipe
-2. Set the `resource_name` attribute to the name of the resource as a symbol, i.e. `WindowsFeature` in DSC becomes
+2. Set the `resource` attribute to the name of the resource as a symbol, i.e. `WindowsFeature` in DSC becomes
 `:windowsfeature`.
 3. For each property in the DSC resource for which you want to declare a desired value, use the syntax
 
@@ -127,7 +127,7 @@ the DSC resource *InstallDSCReskit* given earlier as follows:
 
 ```ruby
     dsc_resource 'get-dsc-resource-kit' do 
-      resource_name :Archive
+      resource :Archive
       property :ensure, 'Present'
       property :path, "#{ENV['USERPROFILE']}/Downloads/DSC Resource Kit 03282014.zip"
       property :destination, "#{ENV['PROGRAMW6432']}/WindowsPowerShell/Modules"
