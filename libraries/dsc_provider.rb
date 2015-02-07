@@ -163,8 +163,10 @@ EOH
   end
 
   def run_powershell(config_directory, code) 
-    cmdlet = PowershellCmdlet.new("#{code}")
-    cmdlet.run
+    Dir.chdir(config_directory) do
+      cmdlet = PowershellCmdlet.new("#{code}")
+      cmdlet.run
+    end
   end
 
   def set_configuration
