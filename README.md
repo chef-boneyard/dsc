@@ -12,13 +12,13 @@ Use knife to upload the cookbook to your Chef server for testing.
 
 *WARNING*: This cookbook demonstrates functionality that is intended to be implemented in a future Chef release. Therefore, it should
 be used for **testing and evaluation purposes only**. If or when the use cases and functionality of this cookbook are released
-in Chef client, the cookbook will be deprecated in favor of the implementation in [Chef](https://github.com/opscode/chef).
+in Chef client, the cookbook will be deprecated in favor of the implementation in [Chef](https://github.com/chef/chef).
 
 **Interfaces and behaviors exposed by this evaluation cookbook are likely to change** before any final implementation, so expect
   that any recipes on which it is based will probably need to be modified to support an implementation in Chef.
   
 Issues (code defects, feature requests, design issues, etc.) with this cookbook may be reported in the cookbook's [source
-repository](https://github.com/opscode-cookbooks/dsc/issues) on Github. As this cookbook is intended for evaluation purposes,
+repository](https://github.com/chef-cookbooks/dsc/issues) on Github. As this cookbook is intended for evaluation purposes,
 issues will likely be addressed in the Chef project rather than this one.
 
 ## Installation
@@ -26,7 +26,7 @@ issues will likely be addressed in the Chef project rather than this one.
 To use this cookbook with knife, clone it into a directory in your
 cookbook path:
 
-    git clone https://github.com/opscode-cookbooks/dsc.git
+    git clone https://github.com/chef-cookbooks/dsc.git
     
 ## Usage
 
@@ -144,7 +144,7 @@ Many of the tasks below will be completed outside of this cookbook as the functi
   * Better error handling / messages
 * Implement "embedded" DSC resource `dsc_script` and `dsc_mof` that allow embedded PowerShell or mof directly in recipes to
   enable re-use.
-* RFC in the public [Chef RFC repository](https://github.com/opscode/chef-rfc)
+* RFC in the public [Chef RFC repository](https://github.com/chef/chef-rfc)
 * Update `ohai` to detect PowerShell version 
 * Direct integration into Chef rather than cookbook
 * Caching of DSC resources to avoid DSC queries (if needed)
@@ -154,7 +154,7 @@ Many of the tasks below will be completed outside of this cookbook as the functi
 
 ### Open issues
 
-None currently identified, but more will probably arise once an official RFC is posted on https://github.com/opscode/chef-rfc.
+None currently identified, but more will probably arise once an official RFC is posted on https://github.com/chef/chef-rfc.
 
 ### Resolved issues
 

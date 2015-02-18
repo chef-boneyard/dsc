@@ -1,7 +1,7 @@
 #
 # Cookbook Name: dsc
 # Recipe: noiis
-# Author:: Adam Edwards (<adamed@getchef.com>)
+# Author:: Adam Edwards (<adamed@chef.io>)
 #
 # Copyright:: 2014, Chef Software, Inc.
 #

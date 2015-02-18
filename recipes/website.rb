@@ -1,6 +1,6 @@
 #
-# Author:: Adam Edwards (<adamed@getchef.com>)
-# Author:: Julian Dunn (<jdunn@getchef.com>)
+# Author:: Adam Edwards (<adamed@chef.io>)
+# Author:: Julian Dunn (<jdunn@chef.io>)
 #
 # Copyright:: 2014, Chef Software, Inc.
 #

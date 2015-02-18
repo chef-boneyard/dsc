@@ -1,7 +1,7 @@
 #
 # Cookbook:: dsc
 # Recipe:: default
-# Author:: Julian Dunn (<jdunn@getchef.com>)
+# Author:: Julian Dunn (<jdunn@chef.io>)
 #
 # Copyright:: 2014, Chef Software, Inc.
 #

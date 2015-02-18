@@ -1,7 +1,7 @@
-# Author:: Adam Edwards (<adamed@getchef.com>)
+# Author:: Adam Edwards (<adamed@chef.io>)
 # Cookbook Name:: dsc Resource:: configuration
 #
-# Copyright:: 2014, Opscode, Inc.
+# Copyright:: 2014, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

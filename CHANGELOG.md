@@ -5,7 +5,7 @@ This file is used to list changes made in each version of the dsc-preview cookbo
 
 0.1.0
 -----
-- [adamed@getchef.com] - Initial implementation of dsc-preview
+- [adamed@chef.io] - Initial implementation of dsc-preview
 
 - - -
 Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.

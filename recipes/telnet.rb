@@ -2,7 +2,7 @@
 # Cookbook Name:: dsc
 # Recipe:: telnet
 #
-# Copyright 2013, Opscode, Inc.
+# Copyright 2013, Chef Software, Inc.
 #
 # All rights reserved - Do Not Redistribute
 #

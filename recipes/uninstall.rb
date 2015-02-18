@@ -1,9 +1,9 @@
 #
 # Cookbook Name:: dsc
 # Recipe:: default
-# Author:: Julian C. Dunn (<jdunn@opscode.com>)
+# Author:: Julian C. Dunn (<jdunn@chef.io>)
 #
-# Copyright (C) 2013 Opscode, Inc.
+# Copyright (C) 2013 Chef Software, Inc.
 # 
 # MICROSOFT CONFIDENTIAL
 # NDA MATERIAL FOR WMF 4.0 NDA Preview Partners ONLY

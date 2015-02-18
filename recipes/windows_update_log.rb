@@ -2,7 +2,7 @@
 # Cookbook Name:: dsc
 # Recipe:: windows_update_log
 #
-# Copyright 2013, Opscode, Inc.
+# Copyright 2013, Chef Software, Inc.
 #
 # All rights reserved - Do Not Redistribute
 #
