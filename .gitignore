@@ -1,27 +1,46 @@
-.autotest
-coverage
-.DS_Store
-pkg
-*/tags
-*~
-
-# you should check in your Gemfile.lock in applications, and not in gems
-Gemfile.lock
-Gemfile.local
-
-# Do not check in the .bundle directory, or any of the files inside it. Those files are specific to each particular machine, and are used to persist installation options between runs of the bundle install command.
+*.gem
+.zero-knife.rb
+*.rbc
 .bundle
-
-# ignore some common Bundler 'binstubs' directory names
-# http://gembundler.com/man/bundle-exec.1.html
-b/
-binstubs/
-
-# RVM and RBENV ruby version files
-.rbenv-version
+.config
+coverage
+InstalledFiles
+lib/bundler/man
+pkg
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+Gemfile.lock
+_Store
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+*.tmp
+*.bk
+*.bkup
+.ruby-version
+.ruby-gemset
 .rvmrc
 
-# Documentation
-_site/*
-.yardoc/
+# YARD artifacts
+.yardoc
+_yardoc
 doc/
+.idea
+
+#chef stuff
+Berksfile.lock
+.kitchen
+.kitchen.local.yml
+vendor/
+.coverage/
+
+#vagrant stuff
+.vagrant/
+.vagrant.d/
+.kitchen/
