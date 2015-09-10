@@ -19,8 +19,7 @@
 require_relative 'dsc_provider'
 
 class DscResource < Chef::Resource
-
-  provides :dsc_resource, :on_platforms => ["windows"]
+  provides :dsc_resource, on_platforms: ['windows']
 
   attr_reader :properties
 
@@ -40,7 +39,7 @@ class DscResource < Chef::Resource
   # Unfortunately that would break applications, so we'll give it a
   # somewhat strange behavior that should allow applications to work without
   # interfering with the common usage for the base class.
-  def resource_name(value=nil)
+  def resource_name(value = nil)
     if value
       Chef::Log.warn('The #resource_name method for dsc_resource is deprecated and will be removed. Please use #resource instead.')
       @resource = value
@@ -49,7 +48,7 @@ class DscResource < Chef::Resource
     end
   end
 
-  def resource(value=nil)
+  def resource(value = nil)
     if value
       @resource = value
     else
@@ -57,9 +56,9 @@ class DscResource < Chef::Resource
     end
   end
 
-  def property(property_name, value=nil, validate=false)
-    if not property_name.is_a?(Symbol)
-      raise TypeError, "A property name of type Symbol must be specified, '#{property_name.to_s}' of type #{property_name.class.to_s} was given"
+  def property(property_name, value = nil, _validate = false)
+    unless property_name.is_a?(Symbol)
+      fail TypeError, "A property name of type Symbol must be specified, '#{property_name}' of type #{property_name.class} was given"
     end
 
     normalized_property_name = property_name.to_s.to_sym

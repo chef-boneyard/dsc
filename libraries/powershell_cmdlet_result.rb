@@ -19,14 +19,13 @@
 require 'json'
 
 class PowershellCmdletResult
-
   def initialize(status, output_format)
     @status = status
     @output_format = output_format
   end
 
-  attr_reader :output_format 
-  
+  attr_reader :output_format
+
   def stderr
     @status.stderr
   end
@@ -38,9 +37,8 @@ class PowershellCmdletResult
       @status.stdout
     end
   end
-  
+
   def succeeded?
     @succeeded = @status.status.exitstatus == 0
   end
 end
-

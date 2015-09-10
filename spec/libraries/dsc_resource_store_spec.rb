@@ -21,14 +21,13 @@ require_relative '../spec_helper.rb'
 require_relative '../../libraries/dsc_resource_store.rb'
 
 describe DscResourceStore do
-
-  it "should get resource names on the first call" do
+  it 'should get resource names on the first call' do
     names = DscResourceStore.get_resource_names
     expect(names.frozen?).to eq(true)
     expect(names.length).to be > 0
   end
 
-  it "should get the same resource names on the first and subsequent calls" do
+  it 'should get the same resource names on the first and subsequent calls' do
     names1 = DscResourceStore.get_resource_names
     names2 = DscResourceStore.get_resource_names
 
@@ -37,8 +36,8 @@ describe DscResourceStore do
     expect(names1.frozen?).to eq(true)
     expect(names2.frozen?).to eq(true)
   end
-  
-  it "should get WindowsFeature" do
+
+  it 'should get WindowsFeature' do
     feature = DscResourceStore.get_resource('WindowsFeature')
     expect(feature.nil?).to eq(false)
   end
@@ -47,8 +46,8 @@ describe DscResourceStore do
     feature = DscResourceStore.get_resource('windowsfeature')
     expect(feature.nil?).to eq(false)
   end
-  
-  it "should get two features successfully" do
+
+  it 'should get two features successfully' do
     file_feature = DscResourceStore.get_resource('file')
     group_feature = DscResourceStore.get_resource('group')
 
@@ -56,5 +55,3 @@ describe DscResourceStore do
     expect(group_feature.nil?).to eq(false)
   end
 end
-
-

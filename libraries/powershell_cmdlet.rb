@@ -24,9 +24,9 @@ require_relative 'powershell_cmdlet_exception.rb'
 require_relative 'powershell_cmdlet_result.rb'
 
 class PowershellCmdlet
-  def initialize(cmdlet, output_format=nil, output_format_options={})
+  def initialize(cmdlet, output_format = nil, output_format_options = {})
     @output_format = output_format
-    
+
     case output_format
     when nil
       @json_format = false
@@ -37,7 +37,7 @@ class PowershellCmdlet
     when :object
       @json_format = true
     else
-      raise ArgumentError, "Invalid output format #{output_format.to_s} specified"
+      fail ArgumentError, "Invalid output format #{output_format} specified"
     end
 
     @cmdlet = cmdlet
@@ -46,34 +46,34 @@ class PowershellCmdlet
 
   attr_reader :output_format
 
-  def run(switches={}, execution_options={}, *arguments)
-    switches_string = (switches.each_pair.map {|pair| ['-'+pair[0].to_s, pair[1].to_s].join(' ')}).join(' ')
+  def run(switches = {}, execution_options = {}, *arguments)
+    switches_string = (switches.each_pair.map { |pair| ['-' + pair[0].to_s, pair[1].to_s].join(' ') }).join(' ')
     arguments_string = arguments.join(' ')
 
     json_depth = 5
 
-    if @json_format && @output_format_options.has_key?(:depth)
+    if @json_format && @output_format_options.key?(:depth)
       json_depth = @output_format_options[:depth]
     end
-    
-    json_command = @json_format ? " | convertto-json -compress -depth #{json_depth}" : ""
+
+    json_command = @json_format ? " | convertto-json -compress -depth #{json_depth}" : ''
     command_string = "powershell.exe -noprofile -noninteractive -command \"trap [Exception] {write-error -exception ($_.Exception.Message);exit 1};#{@cmdlet} #{switches_string} #{arguments_string}#{json_command}\";if ( ! $? ) { exit 1 }"
 
-    augmented_options = {:returns => [0], :live_stream => false}.merge(execution_options)
+    augmented_options = { returns: [0], live_stream: false }.merge(execution_options)
     command = Mixlib::ShellOut.new(command_string, augmented_options)
 
     os_architecture = "#{ENV['PROCESSOR_ARCHITEW6432']}" == 'AMD64' ? :x86_64 : :i386
 
     status = nil
-    
+
     with_architecture(get_os_architecture) do
-      status = command.run_command      
+      status = command.run_command
     end
-    
+
     result = PowershellCmdletResult.new(status, @output_format)
-    
-    if ! result.succeeded?
-      raise PowershellCmdletException, result, "Powershell Cmdlet failed: #{result.stderr}"
+
+    unless result.succeeded?
+      fail PowershellCmdletException, result, "Powershell Cmdlet failed: #{result.stderr}"
     end
 
     result
@@ -86,13 +86,13 @@ class PowershellCmdlet
   def get_os_architecture
     os_architecture_value = "#{ENV['PROCESSOR_ARCHITEW6432']}"
     os_architecture_value = "#{ENV['PROCESSOR_ARCHITECTURE']}" if os_architecture_value.nil?
-    
+
     os_architecture = os_architecture_value == 'AMD64' ? :x86_64 : :i386
   end
-  
+
   def with_architecture(architecture)
-    node = Hash.new
-    node[:kernel] = Hash.new
+    node = {}
+    node[:kernel] = {}
     node[:kernel][:machine] = get_os_architecture
 
     if wow64_architecture_override_required?(node, architecture)
@@ -109,6 +109,4 @@ class PowershellCmdlet
       end
     end
   end
-  
 end
-

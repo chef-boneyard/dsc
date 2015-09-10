@@ -30,7 +30,7 @@ class DscProvider < Chef::Provider
   end
 
   def action_set
-    if ! @resource_converged
+    unless @resource_converged
       converge_by("DSC Resource type '#{dsc_resource_name}}'") do
         set_configuration
         Chef::Log.info("DSC Resource type '#{dsc_resource_name}' Configuration completed successfully")
@@ -51,7 +51,7 @@ class DscProvider < Chef::Provider
     native_resource['Properties'].each { |property_data| @property_map.store(property_data['Name'].downcase, property_data) }
 
     @normalized_properties = get_normalized_properties!
-    @resource_converged = ! run_configuration(:test)
+    @resource_converged = !run_configuration(:test)
   end
 
   def whyrun_supported?
@@ -66,7 +66,7 @@ class DscProvider < Chef::Provider
 
   def get_normalized_properties!
     normalized_properties = {}
-    @dsc_resource.properties.keys.each do | property_name |
+    @dsc_resource.properties.keys.each do |property_name|
       property_value = @dsc_resource.properties[property_name]
       add_normalized_property!(normalized_properties, property_name, property_value)
     end
@@ -90,11 +90,11 @@ class DscProvider < Chef::Provider
 
   def type_coercions
     @type_coercions = {
-      Fixnum => { :type => lambda { |x| x.to_s }, :single_quoted => false },
-      Float => { :type => lambda { |x| x.to_s }, :single_quoted => false },
-      @dsc_resource.class => { :type => Proc.new { |x| resource_code(x) }, :single_quoted => false },
-      FalseClass => { :type => lambda { |x| '$false' }, :single_quoted => false },
-      TrueClass => { :type => lambda { |x| '$true' }, :single_quoted => false }
+      Fixnum => { type: ->(x) { x.to_s }, single_quoted: false },
+      Float => { type: ->(x) { x.to_s }, single_quoted: false },
+      @dsc_resource.class => { type: proc { |x| resource_code(x) }, single_quoted: false },
+      FalseClass => { type: ->(_x) { '$false' }, single_quoted: false },
+      TrueClass => { type: ->(_x) { '$true' }, single_quoted: false }
     }
   end
 
@@ -138,11 +138,11 @@ EOH
   end
 
   def property_code
-    properties = @normalized_properties.map { |name, value| 
+    properties = @normalized_properties.map do |name, value|
       value_code = translate_type(value)
       "        #{name} = #{value_code}"
-    }
-    
+    end
+
     properties.join("\n")
   end
 
@@ -162,7 +162,7 @@ EOH
     translated_value
   end
 
-  def run_powershell(config_directory, code) 
+  def run_powershell(_config_directory, code)
     cmdlet = PowershellCmdlet.new("#{code}")
     cmdlet.run
   end
@@ -178,10 +178,10 @@ EOH
     when :test
       command_code = 'start-dscconfiguration chef_dsc -wait -whatif; if (! $?) { exit 1 }'
     else
-      raise ArgumentError, "#{command.to_s} is not a valid configuration command"
+      fail ArgumentError, "#{command} is not a valid configuration command"
     end
-    
-    config_directory = Dir.mktmpdir("dsc-script")
+
+    config_directory = Dir.mktmpdir('dsc-script')
     generate_configuration config_directory
 
     begin
@@ -201,24 +201,23 @@ EOH
   end
 
   def parse_what_if_output(what_if_output)
-
     # What-if output for start-dscconfiguration contains lines that look like one of the following:
     #
     # What if: [SEA-ADAMED1]: LCM:  [ Start  Set      ]  [[Group]chef_dsc]
     # What if: [SEA-ADAMED1]:                            [[Group]chef_dsc] Performing the operation "Add" on target "Group: demo1"
-    # 
+    #
     # The second line lacking the 'LCM:' is what happens if there is a change require to make the system consistent with the resource.
     # Such a line without LCM is only present if an update to the system is required. Therefore, we test each line below
     # to see if it is missing the LCM, and declare that an update is needed if so.
     has_change_line = false
-    
+
     what_if_output.lines.each do |line|
       if (line =~ /.+\:\s+\[\S*\]\:\s+LCM\:/).nil?
         has_change_line = true
         break
       end
     end
-    
+
     has_change_line
   end
 end

@@ -12,11 +12,11 @@ log_directory = "#{ENV['SystemDrive']}/log-archive"
 directory log_directory do
 end
 
-service "wuauserv" do
+service 'wuauserv' do
   action :stop
 end
 
-dsc_configuration_script "windowsupdatelog" do 
+dsc_configuration_script 'windowsupdatelog' do
   param :sourcelocation, "#{ENV['SystemRoot']}/windowsupdate.log"
   param :destinationlocation, log_directory
   code <<-EOH
@@ -29,14 +29,7 @@ dsc_configuration_script "windowsupdatelog" do
    EOH
 end
 
-
-
-
-
-
-
-service "wuauserv" do
-#  action :start
+service 'wuauserv' do
+  #  action :start
   action :nothing
 end
-

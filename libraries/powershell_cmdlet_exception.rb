@@ -17,13 +17,10 @@
 #
 
 class PowershellCmdletException < Exception
-
-  def initialize(cmdlet_result, message=nil)
+  def initialize(cmdlet_result, message = nil)
     super(message)
     @cmdlet_result = cmdlet_result
   end
-  
-  attr_reader :cmdlet_result
-  
-end
 
+  attr_reader :cmdlet_result
+end

@@ -28,10 +28,8 @@ dsc_resource 'get-dsc-resource-kit' do
   property :destination, "#{ENV['PROGRAMW6432']}\\WindowsPowerShell\\Modules"
 end
 
-=begin
-x_dsc_archive 'get-dsc-resource-kit' do
-  property :ensure, 'Present'
-  property :path, "#{Chef::Config[:file_cache_path]}\\DSC Resource Kit Wave 7.zip"
-  property :destination, "#{ENV['PROGRAMW6432']}\\WindowsPowerShell\\Modules"
-end
-=end
+# x_dsc_archive 'get-dsc-resource-kit' do
+#   property :ensure, 'Present'
+#   property :path, "#{Chef::Config[:file_cache_path]}\\DSC Resource Kit Wave 7.zip"
+#   property :destination, "#{ENV['PROGRAMW6432']}\\WindowsPowerShell\\Modules"
+# end

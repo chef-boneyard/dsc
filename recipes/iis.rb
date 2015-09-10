@@ -21,4 +21,3 @@ dsc_resource 'Install IIS' do
   property :ensure, 'Present'
   property :name, 'Web-Server'
 end
-
