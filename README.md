@@ -1,6 +1,10 @@
 dsc Cookbook
 ===============
 
+[![Build Status](https://travis-ci.org/chef-cookbooks/dsc.svg?branch=master)](http://travis-ci.org/chef-cookbooks/dsc)
+[![Cookbook Version](https://img.shields.io/cookbook/v/dsc.svg)](https://supermarket.chef.io/cookbooks/dsc)
+
+
 This cookbook demonstrates **prototype** functionality to expose PowerShell Desired State
 Configuration (DSC) resources as Chef resources on the Microsoft Windows
 operating system. **This cookbook requires PowerShell 4.0 or later**
@@ -179,10 +183,9 @@ None currently identified, but more will probably arise once an official RFC is 
       * Create a knife-dsc plug-in that enumerates dsc resources on the system and shows the mapped names. (OK, though a little unorthodox).
 
 # License #
+```text
+Copyright:: Copyright (c) 2011-2015 Chef Software, Inc.
 
-Copyright:: Copyright (c) 2011-2014 Chef Software, Inc.
-
-License:: Apache License, Version 2.0
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -195,3 +198,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```
